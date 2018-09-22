@@ -1,0 +1,68 @@
+.\" Manpage for sshrun.
+.\" Copyright (c) 2013
+.\" Created by Jorge Morgado <jorge (at) morgado (dot) ch>
+.\" Please contact the author to correct errors or typos.
+.TH SSHRUN 1 "06 Jan 2013" "1.0" "sshrun man page"
+.SH NAME
+sshrun
+\- Runs a command on a list of servers (as a regular user or using sudo)
+
+.SH SYNOPSIS
+sshrun
+[ \fB-h\fP ] [ \fB-v\fP ] [ \fB--flist\fP \fIfile\fP ] [ \fB--list\fP \fIlist\fP ]
+       [ \fB--sudo\fP ] [ \fB--verbose\fP ] [ \fBsshargs\fP ]
+.SH DESCRIPTION
+.B sshrun
+is a command line tool to run one or more commands on a remote host or list of hosts.
+.PP
+If input is provided from stdin (e.g. cat <servers_list> | ...), the list must
+contain one server per line (same as with --flist). The command(s) should always
+be quoted, otherwise there is no guarantee they won't be executed locally.
+.SH OPTIONS
+.TP
+.B -h
+Print this help.
+.TP
+.B -v
+Print version information.
+.TP
+.B --flist \fIfile\fP
+A file with list of servers (one per line) to run command(s).
+.TP
+.B --list \fIlist\fP
+Comma separated list of servers list to run command(s).
+.TP
+.B --verbose
+Show hostname where running command(s).
+.TP
+.B --sudo
+Run command using sudo (requires \fB--flist\fP or \fB--list\fP). Make sure `sudo' is in your $PATH or it will fail silently.
+.TP
+.I sshargs
+Any ssh arguments.
+.SH EXAMPLES
+cat servers.txt | \fBsshrun\fP uptime
+.PP
+cat servers.txt | \fBsshrun\fP --verbose "df -h"
+.PP
+cat servers.txt | \fBsshrun\fP --verbose -l someuser -i /path/to/key "ps aux"
+.PP
+\fBsshrun\fP --list "host1, host2, hostN" \\
+       --verbose "cat /proc/version; uptime"
+.PP
+\fBsshrun\fP --list "host1, host2, hostN" \\
+       --sudo "apt-get install pckname"
+.PP
+\fBsshrun\fP --list "`cat servers.csv`" --verbose --sudo "lsof -i :443"
+.PP
+\fBsshrun\fP --flist servers.txt --verbose --sudo "lsof -i :443"
+.SH SEE ALSO
+\fBssh\fP(1)
+.SH BUGS
+No known bugs. Please send problems, bugs, questions, desirable enhancements, patches, etc. to:
+.LP
+.RS
+jorge (at) morgado (dot) ch
+.RE
+.SH AUTHOR
+Jorge Morgado (jorge (at) morgado (dot) ch)

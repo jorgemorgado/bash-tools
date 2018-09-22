@@ -1,0 +1,111 @@
+.\" Manpage for sshdiff.
+.\" Copyright (c) 2013
+.\" Created by Jorge Morgado <jorge (at) morgado (dot) ch>
+.\" Please contact the author to correct errors or typos.
+.TH SSHDIFF 1 "06 Jan 2013" "1.0" "sshdiff man page"
+.SH NAME
+sshdiff
+\- Compare two remote files line by line via secure shell
+
+.SH SYNOPSIS
+sshdiff
+[ \fB-h\fP ] [ \fB-v\fP ] [ \fB-r\fP ] [ \fBsshargs\fP ]
+        [ \fB--brief\fP ] [ \fB--context\fP[=\fINUM\fP] ] [ \fB--ed\fP ] [ \fB--expand-tabs\fP ]
+        [ \fB--ignore-all-space\fP ] [ \fB--ignore-blank-lines\fP ]
+        [ \fB--ignore-case\fP ] [ \fB--ignore-file-name-case\fP ]
+        [ \fB--ignore-tab-expansion\fP ] [ \fB--initial-tab\fP ] [ \fB--left-column\fP ]
+        [ \fB--minimal\fP ] [ \fB--no-ignore-file-name-case\fP ] [ \fB--normal\fP ]
+        [ \fB--paginate\fP ] [ \fB--rcs\fP ] [ \fB--side-by-side\fP ]
+        [ \fB--speed-large-files\fP ] [ \fB--strip-trailing-cr\fP ]
+        [ \fB--suppress-common-lines\fP ] [ \fB--text\fP ] [ \fB--unified\fP[=\fINUM\fP] ]
+.SH DESCRIPTION
+sshdiff is a command line tool to compare two remote files.
+.SH OPTIONS
+.TP
+.B -h
+Print this help.
+.TP
+.B -v
+Print version information.
+.TP
+.B -r, --recursive
+Recursively compare any subdirectories found.
+.TP
+.I sshargs
+Any scp arguments for both hosts.
+.TP
+.B --brief
+Output only whether files differ.
+.TP
+.B --context\fP[=\fINUM\fP]
+Output NUM (default 3) lines of unified context.
+.TP
+.B --ed
+Output an ed script.
+.TP
+.B --expand-tabs
+Expand tabs to spaces in output.
+.TP
+.B --ignore-all-space
+Ignore all white space.
+.TP
+.B --ignore-blank-lines
+Ignore changes whose lines are all blank.
+.TP
+.B --ignore-case
+Ignore case differences in file contents.
+.TP
+.B --ignore-file-name-case
+Ignore case when comparing file names.
+.TP
+.B --ignore-tab-expansion
+Ignore changes due to tab expansion.
+.TP
+.B --initial-tab
+Make tabs line up by prepending a tab.
+.TP
+.B --left-column
+Output only the left column of common lines.
+.TP
+.B --minimal
+Try hard to find a smaller set of changes.
+.TP
+.B --no-ignore-file-name-case
+Consider case when comparing file names.
+.TP
+.B --normal
+Output a normal diff.
+.TP
+.B --paginate
+Pass the output through `pr' to paginate it.
+.TP
+.B --rcs
+Output an RCS format diff.
+.TP
+.B --side-by-side
+Output in two columns.
+.TP
+.B --speed-large-files
+Assume large files and many scattered small changes.
+.TP
+.B --strip-trailing-cr
+Strip trailing carriage return on input.
+.TP
+.B --suppress-common-lines
+Do not output common lines.
+.TP
+.B --text
+Treat all files as text.
+.TP
+.B --unified\fP[=\fINUM\fP]
+Output NUM (default 3) lines of copied context.
+.SH SEE ALSO
+\fBscp\fP(1), \fBdiff\fP(1)
+.SH BUGS
+No known bugs. Please send problems, bugs, questions, desirable enhancements, patches, etc. to:
+.LP
+.RS
+jorge (at) morgado (dot) ch
+.RE
+.SH AUTHOR
+Jorge Morgado (jorge (at) morgado (dot) ch)

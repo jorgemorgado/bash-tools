@@ -1,0 +1,35 @@
+.\" Manpage for skp.
+.\" Copyright (c) 2013
+.\" Created by Jorge Morgado <jorge (at) morgado (dot) ch>
+.\" Please contact the author to correct errors or typos.
+.TH SKP 1 "06 Jan 2013" "1.0" "skp man page"
+.SH NAME
+skp
+\- Secure copy a file between two different remote hosts
+
+.SH SYNOPSIS
+skp
+[ \fB-h\fP ] [ \fB-v\fP ] [ \fIsshargs\fP ]
+    [user@]src-host:/src/path [user@]dst-host:/dst/path
+.SH DESCRIPTION
+.B skp
+is a command line tool to secure copy files and directories between two remote hosts.
+.SH OPTIONS
+.IP \fB-h\fP
+Show help.
+.IP \fB-v\fP
+Show version.
+.IP \fIsshargs\fP
+Any 
+.B scp
+arguments.
+.SH SEE ALSO
+\fBscp\fP(1)
+.SH BUGS
+No known bugs. Please send problems, bugs, questions, desirable enhancements, patches, etc. to:
+.LP
+.RS
+jorge (at) morgado (dot) ch
+.RE
+.SH AUTHOR
+Jorge Morgado (jorge (at) morgado (dot) ch)

@@ -1,0 +1,269 @@
+# sshtools(1) completion
+
+have ssh &&
+{
+
+# sshrun(1) completion
+#
+_sshrun()
+{
+    local cur prev configfile
+    local -a config
+
+    COMPREPLY=()
+    _get_comp_words_by_ref -n : cur prev
+
+    _ssh_suboption_check && return 0
+
+    case $prev in
+        --list)
+            # Search COMP_WORDS for '-F configfile' or '-Fconfigfile' argument
+            set -- "${COMP_WORDS[@]}"
+            while [ $# -gt 0 ]; do
+                if [ "${1:0:2}" = -F ]; then
+                    if [ ${#1} -gt 2 ]; then
+                        configfile="$(dequote "${1:2}")"
+                    else
+                        shift
+                        [ "$1" ] && configfile="$(dequote "$1")"
+                    fi
+                    break
+                fi
+                shift
+            done
+            _known_hosts_real -a -F "$configfile" "$cur"
+            return 0
+            ;;
+        -F|-i|-S|--flist)
+            _filedir
+            return 0
+            ;;
+        -c)
+            _ssh_ciphers
+            return 0
+            ;;
+        -m)
+            _ssh_macs
+            return 0
+            ;;
+        -l)
+            COMPREPLY=( $( compgen -u -- "$cur" ) )
+            return 0
+            ;;
+        -o)
+            _ssh_options
+            return 0
+            ;;
+        -w)
+            _available_interfaces
+            return 0
+            ;;
+        -b)
+            _ssh_bindaddress
+            return 0
+            ;;
+    esac
+
+    if [[ "$cur" == -F* ]]; then
+        cur=${cur#-F}
+        _filedir
+        # Prefix completions with '-F'
+        COMPREPLY=( "${COMPREPLY[@]/#/-F}" )
+        cur=-F$cur  # Restore cur
+    elif [[ "$cur" == --flist ]]; then
+        cur=${cur#--flist}
+        _filedir
+        # Prefix completions with '--flist'
+        COMPREPLY=( "${COMPREPLY[@]/#/--flist}" )
+        cur=--flist$cur  # Restore cur
+    elif [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-1 -2 -4 -6 -A -a -C -f -g -h --help -K \
+            -k -M -N -n -q -s -T -t -V -v -X -v -Y -y -b -b -c -D -e -F \
+            -i -L -l -m -O -o -p -R -S -w \
+            --flist --list --sudo --verbose' -- "$cur" ) )
+    fi
+
+    return 0
+}
+shopt -u hostcomplete && complete -F _sshrun sshrun
+
+
+# sshdiff(1) completion
+#
+_sshdiff()
+{
+    local configfile cur prev prefix
+
+    COMPREPLY=()
+    _get_comp_words_by_ref -n : cur prev
+
+    _ssh_suboption_check && {
+        COMPREPLY=( "${COMPREPLY[@]/%/ }" )
+        return 0
+    }
+
+    case $prev in
+        -l|-P)
+            return 0
+            ;;
+        -F|-i|-S)
+            _filedir
+            type compopt &>/dev/null && compopt +o nospace
+            return 0
+            ;;
+        -c)
+            _ssh_ciphers
+            COMPREPLY=( "${COMPREPLY[@]/%/ }" )
+            return 0
+            ;;
+        -o)
+            _ssh_options
+            return 0
+            ;;
+    esac
+
+    _expand || return 0
+
+    if [[ "$cur" == *:* ]]; then
+        _scp_remote_files
+        return 0
+    fi
+
+    if [[ "$cur" == -F* ]]; then
+        cur=${cur#-F}
+        prefix=-F
+    else
+        # Search COMP_WORDS for '-F configfile' or '-Fconfigfile' argument
+        set -- "${COMP_WORDS[@]}"
+        while [ $# -gt 0 ]; do
+            if [ "${1:0:2}" = -F ]; then
+                if [ ${#1} -gt 2 ]; then
+                    configfile="$(dequote "${1:2}")"
+                else
+                    shift
+                    [ "$1" ] && configfile="$(dequote "$1")"
+                fi
+                break
+            fi
+            shift
+        done
+
+        case $cur in
+            -*)
+                COMPREPLY=( $( compgen -W '-1 -2 -4 -6 -B -C -c -F -h --help \
+                    -i -l -o -P -p -q -r --recursive -S -v \
+                    --unified --context --ignore-case --ignore-file-name-case \
+                    --no-ignore-file-name-case --ignore-tab-expansion \
+                    --ignore-all-space --ignore-blank-lines \
+                    --strip-trailing-cr --text --brief --ed --normal --rcs \
+                    --side-by-side --left-column --suppress-common-lines \
+                    --paginate --expand-tabs --initial-tab --minimal \
+                    --speed-large-files' -- "$cur" ) )
+                COMPREPLY=( "${COMPREPLY[@]/%/ }" )
+                return 0
+                ;;
+            */*)
+                # pass through
+                ;;
+            *)
+                _known_hosts_real -c -a -F "$configfile" "$cur"
+                ;;
+        esac
+    fi
+
+    _scp_local_files "$prefix"
+
+    return 0
+}
+complete -F _sshdiff -o nospace sshdiff
+
+# skp(1) completion
+#
+_skp()
+{
+    local configfile cur prev prefix
+
+    COMPREPLY=()
+    _get_comp_words_by_ref -n : cur prev
+
+    _ssh_suboption_check && {
+        COMPREPLY=( "${COMPREPLY[@]/%/ }" )
+        return 0
+    }
+
+    case $prev in
+        -l|-P)
+            return 0
+            ;;
+        -F|-i|-S)
+            _filedir
+            type compopt &>/dev/null && compopt +o nospace
+            return 0
+            ;;
+        -c)
+            _ssh_ciphers
+            COMPREPLY=( "${COMPREPLY[@]/%/ }" )
+            return 0
+            ;;
+        -o)
+            _ssh_options
+            return 0
+            ;;
+    esac
+
+    _expand || return 0
+
+    if [[ "$cur" == *:* ]]; then
+        _scp_remote_files
+        return 0
+    fi
+
+    if [[ "$cur" == -F* ]]; then
+        cur=${cur#-F}
+        prefix=-F
+    else
+        # Search COMP_WORDS for '-F configfile' or '-Fconfigfile' argument
+        set -- "${COMP_WORDS[@]}"
+        while [ $# -gt 0 ]; do
+            if [ "${1:0:2}" = -F ]; then
+                if [ ${#1} -gt 2 ]; then
+                    configfile="$(dequote "${1:2}")"
+                else
+                    shift
+                    [ "$1" ] && configfile="$(dequote "$1")"
+                fi
+                break
+            fi
+            shift
+        done
+
+        case $cur in
+            -*)
+                COMPREPLY=( $( compgen -W '-1 -2 -4 -6 -B -C -c -F -h --help \
+                    -i -l -o -P -p -q -r -S -v' -- "$cur" ) )
+                COMPREPLY=( "${COMPREPLY[@]/%/ }" )
+                return 0
+                ;;
+            */*)
+                # pass through
+                ;;
+            *)
+                _known_hosts_real -c -a -F "$configfile" "$cur"
+                ;;
+        esac
+    fi
+
+    _scp_local_files "$prefix"
+
+    return 0
+}
+complete -F _skp -o nospace skp
+}
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 4
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=4 sw=4 et filetype=sh
